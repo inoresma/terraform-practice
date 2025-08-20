@@ -60,5 +60,5 @@ logs/
 *.temp
 
 .gitignore
-nginx-server.keys
-nginx-server.key.pub
+web-server-key
+web-server-key.pub

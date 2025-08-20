@@ -1,11 +1,47 @@
-### provider ###
+#### Variables ####
+variable "ami_id" {
+  description = "ID de la AMI para la instancia EC2"
+  default = "ami-00ca32bbc84273381"
+}
+
+variable "instance_type" {
+  description = "Tipo de instancia EC2"
+  default = "t2.micro"
+}
+
+variable "server_name" {
+  description = "Nombre del servidor web"
+  default = "web-server"
+}
+
+variable "environment" {
+  description = "Entorno de la app"
+  default = "test"
+}
+
+variable "owner" {
+  description = "Responsable de la creacion de la infraestructura"
+  default = "inoresma@gmail.com"
+}
+
+variable "team" {
+  description = "A que equipo pertenece"
+  default = "DevOps"
+}
+variable "project" {
+  description = "Nombre del proyecto"
+  default = "terraform-practice-iac"
+}
+
+
+#### provider ####
 provider "aws" { 
     region = "us-east-1"
     } 
-### resource ###
+#### resource ####
 resource "aws_instance" "nginx-server" {
-    ami = "ami-00ca32bbc84273381"
-    instance_type = "t2.micro" 
+    ami = var.ami_id
+    instance_type = var.instance_type
 
     user_data = <<-EOF
         #!/bin/bash
@@ -20,11 +56,11 @@ resource "aws_instance" "nginx-server" {
         aws_security_group.nginx-server-sg.id
         ]
     tags ={
-      Name = "nginx-server"
-      Environment = "test"
-      Owner = "inoresma@gmail.com"
-      Team = "DevOps"
-      Project = "terraform-practice-iac"
+      Name = var.server_name
+      Environment = var.environment
+      Owner = var.owner
+      Team = var.team
+      Project = var.project
     }
     }
 
@@ -32,21 +68,21 @@ resource "aws_instance" "nginx-server" {
 ##### key pair ssh ####
 #ssh-keygen -t rsa -b 2048 -f "nginx-server-key"
 resource "aws_key_pair" "nginx_server_ssh" {
-    key_name = "nginx-server-ssh"
-    public_key = file("nginx-server.key.pub")
+    key_name = "${var.server_name}-ssh"
+    public_key = file("${var.server_name}-key.pub")
 
     tags ={
-      Name = "nginx-server-ssh"
-      Environment = "test"
-      Owner = "inoresma@gmail.com"
-      Team = "DevOps"
-      Project = "terraform-practice-iac"
+      Name = "${var.server_name}-ssh"
+      Environment = var.environment
+      Owner = var.owner
+      Team = var.team
+      Project = var.project
     }
 }
 
 ####### SG ####### 
 resource "aws_security_group" "nginx-server-sg" {
-  name        = "nginx-server-sg"
+  name        = "${var.server_name}-sg"
   description = "Security group allowing SSH and HTTP access"
 
   ingress {
@@ -71,11 +107,11 @@ resource "aws_security_group" "nginx-server-sg" {
   }
 
   tags ={
-      Name = "nginx-server-sg"
-      Environment = "test"
-      Owner = "inoresma@gmail.com"
-      Team = "DevOps"
-      Project = "terraform-practice-iac"
+      Name = "${var.server_name}-sg"
+      Environment = var.environment
+      Owner = var.owner
+      Team = var.team
+      Project = var.project
     }
 }
 
