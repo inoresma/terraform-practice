@@ -78,3 +78,16 @@ resource "aws_security_group" "nginx-server-sg" {
       Project = "terraform-practice-iac"
     }
 }
+
+
+
+#### output ###
+output "instance_public_ip" {
+    description = "Public IP of the Nginx server"
+    value = aws_instance.nginx-server.public_ip
+    }
+
+output "instance_public_dns" {
+    description = "Public DNS of the Nginx server"
+    value = aws_instance.nginx-server.public_dns
+    }
