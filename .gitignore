@@ -62,3 +62,6 @@ logs/
 .gitignore
 web-server-key
 web-server-key.pub
+web-server-dev-key.pub
+web-server-qa-key
+web-server-qa-key.pub
